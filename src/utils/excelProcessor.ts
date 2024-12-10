@@ -7,7 +7,10 @@ export interface ProcessingResult {
   uniqueItems: number;
 }
 
-export const processExcelFile = async (file: File, percentage: number): Promise<ProcessingResult> => {
+export const processExcelFile = async (
+  file: File,
+  percentage: number
+): Promise<ProcessingResult> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -23,41 +26,47 @@ export const processExcelFile = async (file: File, percentage: number): Promise<
         const totalItems = jsonData.length;
 
         // Filter valid reviewers (ending with snowcorp.com)
-        // and remove duplicates using Set
-        const validReviewers = [...new Set(
-          jsonData
-            .filter(row => row.Reviewer.toLowerCase().endsWith('snowcorp.com'))
-            .map(row => row.Reviewer)
-        )];
+        const validReviewers = [
+          ...new Set(
+            jsonData
+              .filter((row) => row.Reviewer.toLowerCase().endsWith('snowcorp.com'))
+              .map((row) => row.Reviewer)
+          ),
+        ];
 
-        // Get unique Item IDs to ensure no duplicates
-        const uniqueItemIds = [...new Set(jsonData.map(row => row['Item ID'].toString()))];
-        
-        // Calculate distribution
-        // - First, determine how many total items to select based on percentage
-        // - Then, calculate how many items each reviewer should get
-        const totalItemsToSelect = Math.floor(uniqueItemIds.length * (percentage / 100));
-        const itemsPerReviewer = Math.floor(totalItemsToSelect / validReviewers.length);
-        
-        // Randomly shuffle all items for fair distribution
-        // Using Fisher-Yates shuffle algorithm via sort with random comparison
-        const shuffledItems = [...uniqueItemIds].sort(() => Math.random() - 0.5);
-        
-        // Distribute items among reviewers
-        // Each reviewer gets an equal slice of the shuffled array
-        // This ensures random but fair distribution with no overlaps
-        const processedData: ProcessedData[] = validReviewers.map((reviewer, index) => ({
-          reviewer,
-          itemIds: shuffledItems.slice(
-            index * itemsPerReviewer,
-            (index + 1) * itemsPerReviewer
-          )
-        }));
+        // Group items by reviewer
+        const itemsByReviewer: Record<string, string[]> = validReviewers.reduce((acc, reviewer) => {
+          acc[reviewer] = jsonData
+            .filter((row) => row.Reviewer === reviewer)
+            .map((row) => row['Item ID'].toString());
+          return acc;
+        }, {} as Record<string, string[]>);
+
+        // Calculate the total items to select for each reviewer
+        const processedData: ProcessedData[] = [];
+        let uniqueItems = 0;
+
+        validReviewers.forEach((reviewer) => {
+          const items = itemsByReviewer[reviewer] || [];
+          uniqueItems += items.length;
+
+          // Shuffle the items
+          const shuffledItems = items.sort(() => Math.random() - 0.5);
+
+          // Determine how many items to select for this reviewer based on percentage
+          const itemsToSelect = Math.floor(shuffledItems.length * (percentage / 100));
+
+          // Add to processed data
+          processedData.push({
+            reviewer,
+            itemIds: shuffledItems.slice(0, itemsToSelect),
+          });
+        });
 
         resolve({
           processedData,
           totalItems,
-          uniqueItems: uniqueItemIds.length
+          uniqueItems,
         });
       } catch (error) {
         reject(error);
