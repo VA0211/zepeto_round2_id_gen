@@ -65,10 +65,10 @@ export default function FileUpload() {
               </label>
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors"
+                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-pink-500 transition-colors"
               >
                 {file ? (
-                  <div className="flex items-center justify-center space-x-2 text-blue-600">
+                  <div className="flex items-center justify-center space-x-2 text-pink-600">
                     <FileSpreadsheet className="w-6 h-6" />
                     <span>{file.name}</span>
                   </div>
@@ -90,15 +90,15 @@ export default function FileUpload() {
             </div>
 
             {stats && (
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-medium text-blue-900 mb-2">File Statistics</h3>
+              <div className="bg-pink-50 p-4 rounded-lg">
+                <h3 className="font-medium text-pink-900 mb-2">File Statistics</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-blue-700">Total Items:</p>
+                    <p className="text-pink-700">Total Items:</p>
                     <p className="font-medium">{stats.totalItems}</p>
                   </div>
                   <div>
-                    <p className="text-blue-700">Unique Items:</p>
+                    <p className="text-pink-700">Unique Items:</p>
                     <p className="font-medium">{stats.uniqueItems}</p>
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export default function FileUpload() {
               className={`w-full py-2 px-4 rounded-md text-white font-medium ${
                 !file || loading
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-pink-600 hover:bg-pink-700'
               }`}
             >
               {loading ? 'Processing...' : 'Process File'}
@@ -162,7 +162,7 @@ export default function FileUpload() {
                 </p>
                 <div className="mt-2">
                   <details className="text-sm">
-                    <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
+                    <summary className="cursor-pointer text-pink-600 hover:text-pink-700">
                       View Item IDs
                     </summary>
                     <div className="mt-2 pl-4 text-gray-600">
