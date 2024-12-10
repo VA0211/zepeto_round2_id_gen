@@ -65,10 +65,10 @@ export default function FileUpload() {
               </label>
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-pink-500 transition-colors"
+                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-pink-300 transition-colors"
               >
                 {file ? (
-                  <div className="flex items-center justify-center space-x-2 text-pink-600">
+                  <div className="flex items-center justify-center space-x-2 text-pink-400">
                     <FileSpreadsheet className="w-6 h-6" />
                     <span>{file.name}</span>
                   </div>
@@ -91,10 +91,10 @@ export default function FileUpload() {
 
             {stats && (
               <div className="bg-pink-50 p-4 rounded-lg">
-                <h3 className="font-medium text-pink-900 mb-2">File Statistics</h3>
+                <h3 className="font-medium text-pink-700 mb-2">File Statistics</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-pink-700">Total Items:</p>
+                    <p className="text-pink-500">Total Items:</p>
                     <p className="font-medium">{stats.totalItems}</p>
                   </div>
                   {/* <div>
@@ -132,7 +132,7 @@ export default function FileUpload() {
               className={`w-full py-2 px-4 rounded-md text-white font-medium ${
                 !file || loading
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-pink-600 hover:bg-pink-700'
+                  : 'bg-pink-400 hover:bg-pink-500'
               }`}
             >
               {loading ? 'Processing...' : 'Process File'}
@@ -147,7 +147,7 @@ export default function FileUpload() {
             <h2 className="text-xl font-semibold">Results</h2>
             <button
               onClick={handleExport}
-              className="flex items-center space-x-2 px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-pink-400 text-white rounded-md hover:bg-pink-500 transition-colors"
             >
               <Download className="w-4 h-4" />
               <span>Export to Excel</span>
@@ -162,7 +162,7 @@ export default function FileUpload() {
                 </p>
                 <div className="mt-2">
                   <details className="text-sm">
-                    <summary className="cursor-pointer text-pink-600 hover:text-pink-700">
+                    <summary className="cursor-pointer text-pink-400 hover:text-pink-500">
                       View Item IDs
                     </summary>
                     <div className="mt-2 pl-4 text-gray-600">
