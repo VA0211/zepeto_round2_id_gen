@@ -69,7 +69,7 @@ export const processExcelFile = async (
           const shuffledItems = items.sort(() => Math.random() - 0.5);
 
           // Determine how many items to select for this reviewer based on percentage
-          const itemsToSelect = Math.floor(shuffledItems.length * (percentage / 100));
+          const itemsToSelect = Math.floor(filteredData.length * (percentage / 100));
 
           // Add to processed data
           processedData.push({
