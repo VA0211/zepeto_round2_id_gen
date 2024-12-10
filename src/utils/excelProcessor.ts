@@ -22,27 +22,41 @@ export const processExcelFile = async (
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = utils.sheet_to_json<ReviewData>(worksheet);
 
-        // Get total number of items in the original file
-        const totalItems = jsonData.length;
+        // Step 1: Filter out duplicate Item IDs by keeping only the newest record
+        const newestItems = jsonData.reduce((acc, row) => {
+          const itemId = row['Item ID'].toString();
+          const reviewDate = new Date(row['Review Updated At']);
 
-        // Filter valid reviewers (ending with snowcorp.com)
+          if (!acc[itemId] || new Date(acc[itemId]['Review Updated At']) < reviewDate) {
+            acc[itemId] = row; // Keep the newest record
+          }
+
+          return acc;
+        }, {} as Record<string, ReviewData>);
+
+        const filteredData = Object.values(newestItems);
+
+        // Step 2: Get total number of items in the filtered data
+        const totalItems = filteredData.length;
+
+        // Step 3: Filter valid reviewers (ending with snowcorp.com)
         const validReviewers = [
           ...new Set(
-            jsonData
+            filteredData
               .filter((row) => row.Reviewer.toLowerCase().endsWith('snowcorp.com'))
               .map((row) => row.Reviewer)
           ),
         ];
 
-        // Group items by reviewer
+        // Step 4: Group items by reviewer
         const itemsByReviewer: Record<string, string[]> = validReviewers.reduce((acc, reviewer) => {
-          acc[reviewer] = jsonData
+          acc[reviewer] = filteredData
             .filter((row) => row.Reviewer === reviewer)
             .map((row) => row['Item ID'].toString());
           return acc;
         }, {} as Record<string, string[]>);
 
-        // Calculate the total items to select for each reviewer
+        // Step 5: Calculate the total items to select for each reviewer
         const processedData: ProcessedData[] = [];
         let uniqueItems = 0;
 
