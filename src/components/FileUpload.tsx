@@ -97,10 +97,10 @@ export default function FileUpload() {
                     <p className="text-pink-500">Total Items:</p>
                     <p className="font-medium">{stats.totalItems}</p>
                   </div>
-                  {/* <div>
+                  <div>
                     <p className="text-pink-700">Unique Items:</p>
                     <p className="font-medium">{stats.uniqueItems}</p>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             )}

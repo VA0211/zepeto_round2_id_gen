@@ -22,6 +22,9 @@ export const processExcelFile = async (
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = utils.sheet_to_json<ReviewData>(worksheet);
 
+        // Get total number of items in the original file
+        const totalItems = jsonData.length;
+
         // Step 1: Filter out duplicate Item IDs by keeping only the newest record
         const newestItems = jsonData.reduce((acc, row) => {
           const itemId = row['Item ID'].toString();
@@ -36,8 +39,8 @@ export const processExcelFile = async (
 
         const filteredData = Object.values(newestItems);
 
-        // Step 2: Get total number of items in the filtered data
-        const totalItems = filteredData.length;
+        // Get unique number of items
+        const uniqueItems = filteredData.length;
 
         // Step 3: Filter valid reviewers (ending with snowcorp.com)
         const validReviewers = [
@@ -58,11 +61,9 @@ export const processExcelFile = async (
 
         // Step 5: Calculate the total items to select for each reviewer
         const processedData: ProcessedData[] = [];
-        let uniqueItems = 0;
 
         validReviewers.forEach((reviewer) => {
           const items = itemsByReviewer[reviewer] || [];
-          uniqueItems += items.length;
 
           // Shuffle the items
           const shuffledItems = items.sort(() => Math.random() - 0.5);
