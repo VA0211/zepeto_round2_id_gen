@@ -147,7 +147,7 @@ export default function FileUpload() {
             <h2 className="text-xl font-semibold">Results</h2>
             <button
               onClick={handleExport}
-              className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
             >
               <Download className="w-4 h-4" />
               <span>Export to Excel</span>
